@@ -1,14 +1,19 @@
 $(document).ready(function(){
     
-    chrome.tabs.getSelected(null, function(tab) {
-        getTabURL(tab.url);
-        });
-
-    function getTabURL(tablink) {
-      $(".prepopulate").val(tablink);
-      return tablink;
-      }
+    var tablink = null;
     
+    function getTabURL() {chrome.tabs.getSelected(null, function(tab) {
+            populateTabURL(tab.url);
+            tablink = tab.url;
+            });
+        }
+    
+    function populateTabURL(tablink) {
+      $(".prepopulate").val(tablink);
+      }
+
+    getTabURL();
+
     
     $('#submit').click(function() {
         var formData = $("#form").serializeArray(),
@@ -36,17 +41,18 @@ $(document).ready(function(){
         results.push('<h3>Content:' + dataObj['Nugget.Content'] + '</h3>');
         results.push('<div>Source:' + dataObj['Nugget.Source']  + '</div>');
         results.push('<div>Posted:' + dataObj['Nugget.Tag']  + '</div>');
-        console.log(results);
         $('#result').html(results.join(''));
         
         
-        var query = new Parse.Query(Nugget).equalTo("Source");
+        var query = new Parse.Query(Nugget).equalTo("Source",$(".prepopulate").val());
 
         query.find({
           success: function(results) {
             /*alert("success");*/
-            alert(JSON.stringify(results));
-            $(".success").show();     
+            var query_results = [];
+            JSON_results = JSON.stringify(results);
+            query_results.push('<div>' + JSON_results + '</div>');
+            $('#query').html(query_results.join(''));     
           },
           error: function(error) {
             alert("error");
