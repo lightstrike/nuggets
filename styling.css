@@ -1,0 +1,25 @@
+body {
+    min-width: 300px;
+    overflow-x: hidden;
+    font-family: helvetica, sans-serif;
+    text-align: center;
+    background-color: #3BF;
+}
+
+textarea {
+    min-height: 100px;
+    font-family: helvetica, sans-serif;
+}
+
+input, textarea {
+    width: 90%;
+    margin: 0% 5% 5% 5%;
+}
+
+img {
+    margin: 4%;
+    border: 1% solid black;
+    vertical-align: middle;
+    width: 20%;
+    height: 20%;
+}
