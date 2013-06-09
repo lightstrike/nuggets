@@ -1,21 +1,38 @@
 $(document).ready(function(){
     
-    var tablink = null;
-    
-    function getTabURL() {chrome.tabs.getSelected(null, function(tab) {
-            populateTabURL(tab.url);
-            tablink = tab.url;
+function initialize() {chrome.tabs.getSelected(null, function(tab) {
+            $(".prepopulate").val(tab.title);
+            Parse.initialize("sKtmhxM9qK4VPgdJ8s1speUjACWy49U18mB6BlJY", "rTgoaqx3zjpZ4TPwuWlUa7niqvVxR6QMWtdENsET");
+            runQuery();
             });
         }
-    
-    function populateTabURL(tablink) {
-      $(".prepopulate").val(tablink);
-      }
 
-    getTabURL();
+function runQuery() {
+        var Nugget = Parse.Object.extend("Nugget");
+        var query = new Parse.Query(Nugget).equalTo("Source",$(".prepopulate").val()).descending("createdAt");
+
+        query.find({
+          success: function(results) {
+            var query_results = [];
+            for(i=0;i<results.length;i++)
+            {
+              query_results.push('<div class="nugget-tile">' + '<div class="nugget-content">' + results[i].get("Content") + "</div>" + '<div class="nugget-add"><img class="follow-image" src="plus.png" /></div></div>');
+            }
+            $('#query').html(query_results.join(''));    
+          },
+          error: function(error) {
+            alert("error");
+            $(".error").show();
+          }
+        });
+        }
+
+initialize();
 
     
     $('#submit').click(function() {
+    
+        
         var formData = $("#form").serializeArray(),
             len = formData.length,
             dataObj = {};
@@ -23,8 +40,11 @@ $(document).ready(function(){
         for (i=0; i<len; i++) {
             dataObj[formData[i].name] = formData[i].value;
             }
-        
-        Parse.initialize("sKtmhxM9qK4VPgdJ8s1speUjACWy49U18mB6BlJY", "rTgoaqx3zjpZ4TPwuWlUa7niqvVxR6QMWtdENsET");
+            
+        if (dataObj['Nugget.Content'] == "") {
+            alert("Please enter text!");
+            return false;
+            }
 
         var Nugget = Parse.Object.extend("Nugget");
         var nuggetObject = new Nugget();
@@ -36,30 +56,15 @@ $(document).ready(function(){
             $(".error").show();
           }
         });
-
-        var results = [];
-        results.push('<h3>Content:' + dataObj['Nugget.Content'] + '</h3>');
-        results.push('<div>Source:' + dataObj['Nugget.Source']  + '</div>');
-        results.push('<div>Posted:' + dataObj['Nugget.Tag']  + '</div>');
-        $('#result').html(results.join(''));
         
+        runQuery();
         
-        var query = new Parse.Query(Nugget).equalTo("Source",$(".prepopulate").val());
-
-        query.find({
-          success: function(results) {
-            /*alert("success");*/
-            var query_results = [];
-            JSON_results = JSON.stringify(results);
-            query_results.push('<div>' + JSON_results + '</div>');
-            $('#query').html(query_results.join(''));     
-          },
-          error: function(error) {
-            alert("error");
-            $(".error").show();
-          }
-        });
+        $('.nugget-field').val("");
         
         return false; 
     });
+    
+    $('.follow-image').click( function() {
+        $(this).attr('src','check.png');
+        });
 });

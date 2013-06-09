@@ -8,23 +8,30 @@
     <script type="text/javascript" src="nuggets.js"></script>
   </head>
   <body>
-    <h2>Record your nugget</h2>  
-    <form id="form">
-      <h4></h4>
-      <textarea id="Nugget.Content" name="Nugget.Content" type="text" placeholder="In 140 characters or less, write what you learned from this link."></textarea> 
-      <input id="Nugget.Source" class="prepopulate" name="Nugget.Source" type="text" /> 
-      <input id="Nugget.Tag" name="Nugget.Tag" type="text" placeholder="Add topics here." /> 
-      
-      <input id="submit" type="button" name="submit" value="Submit"  />
-    </form>
-    
-    <div id="result"></div>
+    <div id="container">
+        
+    <h2>Nuggets of Wisdom</h2>
+    <p><small>Record. Recall. Discover.</small></p>  
     
     <hr />
     
-    <h2>Related Nuggets</h2>
+    <form id="form">
+      <label>What did you learn?</label>
+      <textarea id="Nugget.Content" class="nugget-field" name="Nugget.Content" type="text" placeholder="Enter nugget here..."></textarea> 
+      <label>Source</label>
+      <input id="Nugget.Source" class="prepopulate" name="Nugget.Source" type="text" /> 
+      <label>Topic(s)</label>
+      <input id="Nugget.Tag" class="nugget-field" name="Nugget.Tag" type="text" placeholder="This nugget is about..." /> 
+      
+      <div id="submit" name="submit" /><img src="plus.png" /></div>
+    </form>
+    
+    <hr />
+    
+    <h3>Related Nuggets</h3>
     <div id="query"></div>
     
+    </div>
   </body>
 </html>
 
